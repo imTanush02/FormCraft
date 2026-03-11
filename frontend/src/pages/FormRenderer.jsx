@@ -75,7 +75,6 @@ export default function FormRenderer() {
     }
   };
 
-  // ─── Loading state ─── 
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -84,7 +83,6 @@ export default function FormRenderer() {
     );
   }
 
-  // ─── Not found state ───
   if (notFound) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -97,7 +95,6 @@ export default function FormRenderer() {
     );
   }
 
-  // ─── Success state ───
   if (isSuccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -124,7 +121,6 @@ export default function FormRenderer() {
     );
   }
 
-  // ─── Form rendering ───
   const design = form.design || {};
   const settings = form.settings || {};
 
@@ -160,7 +156,6 @@ export default function FormRenderer() {
           </div>
         )}
 
-        {/* Title & description */}
         <h1 className="text-2xl font-bold mb-2" style={{ color: accentColor, fontFamily: design.fontFamily }}>
           {form.title}
         </h1>

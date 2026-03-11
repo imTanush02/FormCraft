@@ -6,7 +6,7 @@ export const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);         // initial token check
+  const [isLoading, setIsLoading] = useState(true);         
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
         setCurrentUser(data.user);
         setIsAuthenticated(true);
       } catch {
-        // Token invalid — clear stale data
+        
         localStorage.removeItem('fc_token');
         localStorage.removeItem('fc_user');
       } finally {

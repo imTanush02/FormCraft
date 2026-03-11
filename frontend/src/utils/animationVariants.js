@@ -4,7 +4,7 @@ export const listFadeIn = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,       // slight delay between each child
+      staggerChildren: 0.08,       
       delayChildren: 0.1,
     },
   },

@@ -70,7 +70,6 @@ export default function DashboardItem({ form, onDelete, onTogglePublish, onDupli
         </span>
       </div>
 
-      {/* Public URL bar — only shown when published */}
       <AnimatePresence>
         {form.isPublished && form.slug && (
           <motion.div

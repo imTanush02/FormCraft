@@ -21,7 +21,7 @@ export default function ResponseViewer() {
   const [analytics, setAnalytics] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeView, setActiveView] = useState('table'); // 'table' | 'analytics'
+  const [activeView, setActiveView] = useState('table'); 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -245,7 +245,6 @@ export default function ResponseViewer() {
               </div>
             )}
 
-            {/* Field-specific stats */}
             {Object.entries(analytics.fieldStats).map(([fieldId, stat]) => (
               <div key={fieldId} className="glass-card p-5">
                 <h3 className="text-lg font-display font-semibold text-white mb-1">{stat.label}</h3>

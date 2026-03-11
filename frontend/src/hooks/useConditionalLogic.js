@@ -41,14 +41,12 @@ export default function useConditionalLogic() {
     const reqRules = rules.filter((r) => r.action === 'makeRequired');
     const optRules = rules.filter((r) => r.action === 'makeOptional');
 
-    // Process show rules — if present, field is hidden by default unless condition met
     if (showRules.length > 0) {
       const useOr = showRules.some((r) => r.chainMode === 'OR');
       const results = showRules.map((r) => evaluateRule(r, answers));
       visible = useOr ? results.some(Boolean) : results.every(Boolean);
     }
 
-    // Process hide rules — if condition met, hide the field
     if (hideRules.length > 0) {
       const useOr = hideRules.some((r) => r.chainMode === 'OR');
       const results = hideRules.map((r) => evaluateRule(r, answers));

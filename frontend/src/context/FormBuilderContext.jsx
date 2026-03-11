@@ -123,7 +123,7 @@ export function FormBuilderProvider({ children, initialForm }) {
     setFormTitle, setFormDescription, setSelectedFieldId,
     addField, removeField, updateField,
     moveFieldUp, moveFieldDown, duplicateField,
-    // Design & Settings
+    
     updateDesign, updateSettings,
     getFormPayload, markSaved, setHasUnsavedChanges,
   };

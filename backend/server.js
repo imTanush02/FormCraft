@@ -20,16 +20,16 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  limits: { fileSize: 5 * 1024 * 1024 }, 
 });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: '*', credentials: true }));               // allow frontend origin
-app.use(express.json({ limit: '10mb' }));                         // parse JSON bodies
-app.use(express.urlencoded({ extended: true }));                   // parse URL-encoded bodies
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve uploaded files
+app.use(cors({ origin: '*', credentials: true }));               
+app.use(express.json({ limit: '10mb' }));                         
+app.use(express.urlencoded({ extended: true }));                   
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/forms', formRoutes);

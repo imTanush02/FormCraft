@@ -22,7 +22,7 @@ const responseBlueprint = new mongoose.Schema(
       userAgent: { type: String, default: 'unknown' },
       referrer: { type: String, default: '' },
     },
-    /* Explicit timestamp for submissions (separate from Mongoose timestamps) */
+    
     submittedAt: {
       type: Date,
       default: Date.now,

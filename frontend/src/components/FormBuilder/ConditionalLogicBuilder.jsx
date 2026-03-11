@@ -26,7 +26,6 @@ export default function ConditionalLogicBuilder({ field, onUpdate }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editRules, setEditRules] = useState(field.conditionalRules || []);
 
-  // Other fields that can be watched (exclude self)
   const otherFields = fields.filter((f) => f.fieldId !== field.fieldId);
 
   const addRule = () => {
@@ -120,7 +119,7 @@ export default function ConditionalLogicBuilder({ field, onUpdate }) {
                 ) : (
                   editRules.map((rule, idx) => (
                     <div key={idx} className="bg-surface-800/60 rounded-lg p-4 border border-surface-700/40 space-y-3">
-                      {/* Chain mode (for rules after the first) */}
+                      
                       {idx > 0 && (
                         <div className="flex items-center gap-2 mb-2">
                           <select
@@ -163,7 +162,6 @@ export default function ConditionalLogicBuilder({ field, onUpdate }) {
                           </select>
                         </div>
 
-                        {/* Compare value (hidden for isEmpty/isNotEmpty) */}
                         <div>
                           <label className="block text-xs text-surface-400 mb-1">Value</label>
                           <input
@@ -204,7 +202,6 @@ export default function ConditionalLogicBuilder({ field, onUpdate }) {
                 )}
               </div>
 
-              {/* Add rule + save */}
               <div className="flex items-center justify-between">
                 <button
                   onClick={addRule}

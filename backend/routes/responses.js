@@ -28,7 +28,6 @@ router.post('/:formId', async (req, res) => {
       return res.status(400).json({ message: 'Answers object is required' });
     }
 
-    // Server-side required-field validation
     const missingFields = [];
     form.fields.forEach((field) => {
       if (field.isRequired) {
@@ -108,7 +107,6 @@ router.get('/:formId/analytics', requireAuth, async (req, res) => {
 
     const allResponses = await Response.find({ parentFormId: form._id });
 
-    // 1) Submissions over time — group by date
     const submissionsByDate = {};
     allResponses.forEach((resp) => {
       const dateKey = new Date(resp.submittedAt).toISOString().split('T')[0];
@@ -118,7 +116,6 @@ router.get('/:formId/analytics', requireAuth, async (req, res) => {
       .map(([date, count]) => ({ date, count }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
-    // 2) Field-specific stats for choice-based fields (dropdown, checkbox, radio)
     const fieldStats = {};
     const choiceFields = form.fields.filter((f) =>
       ['dropdown', 'checkbox', 'radio'].includes(f.kind)
@@ -166,7 +163,7 @@ router.get('/:formId/export', requireAuth, async (req, res) => {
 
       form.fields.forEach((field) => {
         const val = resp.answers[field.fieldId];
-        // Flatten arrays (checkboxes) to comma-separated strings
+        
         row[field.label] = Array.isArray(val) ? val.join(', ') : (val ?? '');
       });
 
