@@ -1,0 +1,130 @@
+/* ─── Tailwind Directives ─── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Global Resets & Base Styles ─── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0f172a;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+/* ─── Scrollbar Styling ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ─── Selection Color ─── */
+::selection {
+  background-color: rgba(99, 102, 241, 0.3);
+  color: #e0e7ff;
+}
+
+/* ─── Focus Ring ─── */
+*:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* ─── Utility Layers ─── */
+@layer components {
+  /* Glass-morphism card */
+  .glass-card {
+    @apply bg-surface-800/50 backdrop-blur-xl border border-surface-700/50 rounded-xl shadow-xl;
+  }
+
+  /* Primary gradient button */
+  .btn-primary {
+    @apply bg-gradient-to-r from-brand-500 to-brand-600 text-white font-medium 
+           py-2.5 px-5 rounded-lg shadow-lg shadow-brand-500/25
+           hover:from-brand-400 hover:to-brand-500 hover:shadow-brand-400/30
+           active:scale-[0.98] transition-all duration-200;
+  }
+
+  /* Ghost / outline button */
+  .btn-ghost {
+    @apply border border-surface-600 text-surface-300 font-medium 
+           py-2.5 px-5 rounded-lg
+           hover:bg-surface-700/50 hover:text-surface-100 hover:border-surface-500
+           active:scale-[0.98] transition-all duration-200;
+  }
+
+  /* Danger button */
+  .btn-danger {
+    @apply bg-gradient-to-r from-red-500 to-rose-600 text-white font-medium 
+           py-2.5 px-5 rounded-lg shadow-lg shadow-red-500/25
+           hover:from-red-400 hover:to-rose-500
+           active:scale-[0.98] transition-all duration-200;
+  }
+
+  /* Form input field */
+  .input-field {
+    @apply w-full bg-surface-800/80 border border-surface-600/50 rounded-lg
+           px-4 py-2.5 text-surface-100 placeholder-surface-500
+           focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30
+           transition-all duration-200;
+  }
+
+  /* Badge / chip */
+  .status-badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+}
+
+/* ─── Custom Animations ─── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(99,102,241,0.08) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes checkmark-draw {
+  0% { stroke-dashoffset: 48; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.animate-checkmark path {
+  stroke-dasharray: 48;
+  animation: checkmark-draw 0.5s ease-out forwards;
+}
+
+/* ─── Toast Overrides ─── */
+.Toastify__toast {
+  border-radius: 12px !important;
+  backdrop-filter: blur(16px) !important;
+}
