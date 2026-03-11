@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
-export default function FormCard({ form, onDelete, onTogglePublish, onDuplicate }) {
+export default function DashboardItem({ form, onDelete, onTogglePublish, onDuplicate }) {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
 
@@ -62,7 +62,7 @@ export default function FormCard({ form, onDelete, onTogglePublish, onDuplicate 
       <div className="flex items-center gap-4 text-sm text-surface-400">
         <span className="flex items-center gap-1.5">
           <i className="ri-inbox-line"></i>
-          {form.submissionCount || 0} responses
+          {form.replyCount || 0} responses
         </span>
         <span className="flex items-center gap-1.5">
           <i className="ri-time-line"></i>

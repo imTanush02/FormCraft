@@ -2,7 +2,7 @@
 const express = require('express');
 const Form = require('../models/Form');
 const Response = require('../models/Response');
-const guardRoute = require('../middleware/auth');
+const requireAuth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -15,8 +15,8 @@ router.post('/:formId', async (req, res) => {
     }
     if (!form.settings.allowMultipleSubmissions) {
       const existingByIp = await Response.findOne({
-        formRef: form._id,
-        'metadata.ipAddress': req.ip || 'unknown',
+        parentFormId: form._id,
+        'sysDetails.ipAddress': req.ip || 'unknown',
       });
       if (existingByIp) {
         return res.status(429).json({ message: 'You have already submitted a response to this form' });
@@ -46,27 +46,27 @@ router.post('/:formId', async (req, res) => {
       });
     }
     const submission = await Response.create({
-      formRef: form._id,
+      parentFormId: form._id,
       answers,
-      metadata: {
+      sysDetails: {
         ipAddress: req.ip || req.connection?.remoteAddress || 'unknown',
         userAgent: req.headers['user-agent'] || 'unknown',
         referrer: req.headers.referer || '',
       },
     });
-    form.submissionCount = (form.submissionCount || 0) + 1;
+    form.replyCount = (form.replyCount || 0) + 1;
     await form.save();
 
     res.status(201).json({ message: 'Response submitted successfully', id: submission._id });
   } catch (err) {
-    console.error('Submit response error:', err.message);
+    console.log('Error caught in Submit response error::', err.message);
     res.status(500).json({ message: 'Failed to submit response' });
   }
 });
 
-router.get('/:formId', guardRoute, async (req, res) => {
+router.get('/:formId', requireAuth, async (req, res) => {
   try {
-    const form = await Form.findOne({ _id: req.params.formId, architect: req.userId });
+    const form = await Form.findOne({ _id: req.params.formId, creatorId: req.userId });
     if (!form) {
       return res.status(404).json({ message: 'Form not found or access denied' });
     }
@@ -74,12 +74,12 @@ router.get('/:formId', guardRoute, async (req, res) => {
     const { page = 1, limit = 50, search = '' } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    const responses = await Response.find({ formRef: form._id })
+    const responses = await Response.find({ parentFormId: form._id })
       .sort({ submittedAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
 
-    const totalCount = await Response.countDocuments({ formRef: form._id });
+    const totalCount = await Response.countDocuments({ parentFormId: form._id });
 
     res.json({
       responses,
@@ -94,19 +94,19 @@ router.get('/:formId', guardRoute, async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('List responses error:', err.message);
+    console.log('Error caught in List responses error::', err.message);
     res.status(500).json({ message: 'Failed to fetch responses' });
   }
 });
 
-router.get('/:formId/analytics', guardRoute, async (req, res) => {
+router.get('/:formId/analytics', requireAuth, async (req, res) => {
   try {
-    const form = await Form.findOne({ _id: req.params.formId, architect: req.userId });
+    const form = await Form.findOne({ _id: req.params.formId, creatorId: req.userId });
     if (!form) {
       return res.status(404).json({ message: 'Form not found or access denied' });
     }
 
-    const allResponses = await Response.find({ formRef: form._id });
+    const allResponses = await Response.find({ parentFormId: form._id });
 
     // 1) Submissions over time — group by date
     const submissionsByDate = {};
@@ -148,19 +148,19 @@ router.get('/:formId/analytics', guardRoute, async (req, res) => {
       fieldStats,
     });
   } catch (err) {
-    console.error('Analytics error:', err.message);
+    console.log('Error caught in Analytics error::', err.message);
     res.status(500).json({ message: 'Failed to generate analytics' });
   }
 });
 
-router.get('/:formId/export', guardRoute, async (req, res) => {
+router.get('/:formId/export', requireAuth, async (req, res) => {
   try {
-    const form = await Form.findOne({ _id: req.params.formId, architect: req.userId });
+    const form = await Form.findOne({ _id: req.params.formId, creatorId: req.userId });
     if (!form) {
       return res.status(404).json({ message: 'Form not found or access denied' });
     }
 
-    const allResponses = await Response.find({ formRef: form._id }).sort({ submittedAt: -1 });
+    const allResponses = await Response.find({ parentFormId: form._id }).sort({ submittedAt: -1 });
     const exportData = allResponses.map((resp) => {
       const row = { submissionId: resp._id, submittedAt: resp.submittedAt };
 
@@ -170,15 +170,15 @@ router.get('/:formId/export', guardRoute, async (req, res) => {
         row[field.label] = Array.isArray(val) ? val.join(', ') : (val ?? '');
       });
 
-      row.ipAddress = resp.metadata?.ipAddress || '';
-      row.userAgent = resp.metadata?.userAgent || '';
+      row.ipAddress = resp.sysDetails?.ipAddress || '';
+      row.userAgent = resp.sysDetails?.userAgent || '';
 
       return row;
     });
 
     res.json({ exportData, formTitle: form.title });
   } catch (err) {
-    console.error('Export error:', err.message);
+    console.log('Error caught in Export error::', err.message);
     res.status(500).json({ message: 'Failed to export responses' });
   }
 });

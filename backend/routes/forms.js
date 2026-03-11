@@ -3,7 +3,7 @@ const express = require('express');
 const { nanoid } = require('nanoid');
 const Form = require('../models/Form');
 const Response = require('../models/Response');
-const guardRoute = require('../middleware/auth');
+const requireAuth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -15,20 +15,20 @@ const buildSlug = (title) => {
   return `${base}-${nanoid(6)}`;
 };
 
-router.get('/', guardRoute, async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
   try {
-    const forms = await Form.find({ architect: req.userId })
+    const forms = await Form.find({ creatorId: req.userId })
       .sort({ updatedAt: -1 })
-      .select('title description slug isPublished submissionCount createdAt updatedAt');
+      .select('title description slug isPublished replyCount createdAt updatedAt');
 
     res.json({ forms });
   } catch (err) {
-    console.error('List forms error:', err.message);
+    console.log('Error caught in List forms error::', err.message);
     res.status(500).json({ message: 'Failed to fetch forms' });
   }
 });
 
-router.post('/', guardRoute, async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   try {
     const { title, description } = req.body;
 
@@ -42,7 +42,7 @@ router.post('/', guardRoute, async (req, res) => {
       title: title.trim(),
       description: (description || '').trim(),
       slug,
-      architect: req.userId,
+      creatorId: req.userId,
       fields: [],
       design: {},
       settings: {},
@@ -50,27 +50,27 @@ router.post('/', guardRoute, async (req, res) => {
 
     res.status(201).json({ form });
   } catch (err) {
-    console.error('Create form error:', err.message);
+    console.log('Error caught in Create form error::', err.message);
     res.status(500).json({ message: 'Failed to create form' });
   }
 });
 
-router.get('/:id', guardRoute, async (req, res) => {
+router.get('/:id', requireAuth, async (req, res) => {
   try {
-    const form = await Form.findOne({ _id: req.params.id, architect: req.userId });
+    const form = await Form.findOne({ _id: req.params.id, creatorId: req.userId });
     if (!form) {
       return res.status(404).json({ message: 'Form not found' });
     }
     res.json({ form });
   } catch (err) {
-    console.error('Get form error:', err.message);
+    console.log('Error caught in Get form error::', err.message);
     res.status(500).json({ message: 'Failed to fetch form' });
   }
 });
 
-router.put('/:id', guardRoute, async (req, res) => {
+router.put('/:id', requireAuth, async (req, res) => {
   try {
-    const form = await Form.findOne({ _id: req.params.id, architect: req.userId });
+    const form = await Form.findOne({ _id: req.params.id, creatorId: req.userId });
     if (!form) {
       return res.status(404).json({ message: 'Form not found' });
     }
@@ -84,31 +84,31 @@ router.put('/:id', guardRoute, async (req, res) => {
     await form.save();
     res.json({ form });
   } catch (err) {
-    console.error('Update form error:', err.message);
+    console.log('Error caught in Update form error::', err.message);
     res.status(500).json({ message: 'Failed to update form' });
   }
 });
 
-router.delete('/:id', guardRoute, async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res) => {
   try {
-    const form = await Form.findOneAndDelete({ _id: req.params.id, architect: req.userId });
+    const form = await Form.findOneAndDelete({ _id: req.params.id, creatorId: req.userId });
     if (!form) {
       return res.status(404).json({ message: 'Form not found' });
     }
 
     // Cascade-delete all responses tied to this form
-    await Response.deleteMany({ formRef: form._id });
+    await Response.deleteMany({ parentFormId: form._id });
 
     res.json({ message: 'Form and its responses deleted successfully' });
   } catch (err) {
-    console.error('Delete form error:', err.message);
+    console.log('Error caught in Delete form error::', err.message);
     res.status(500).json({ message: 'Failed to delete form' });
   }
 });
 
-router.patch('/:id/publish', guardRoute, async (req, res) => {
+router.patch('/:id/publish', requireAuth, async (req, res) => {
   try {
-    const form = await Form.findOne({ _id: req.params.id, architect: req.userId });
+    const form = await Form.findOne({ _id: req.params.id, creatorId: req.userId });
     if (!form) {
       return res.status(404).json({ message: 'Form not found' });
     }
@@ -118,14 +118,14 @@ router.patch('/:id/publish', guardRoute, async (req, res) => {
 
     res.json({ form, message: form.isPublished ? 'Form published' : 'Form unpublished' });
   } catch (err) {
-    console.error('Publish toggle error:', err.message);
+    console.log('Error caught in Publish toggle error::', err.message);
     res.status(500).json({ message: 'Failed to toggle publish status' });
   }
 });
 
-router.post('/:id/duplicate', guardRoute, async (req, res) => {
+router.post('/:id/duplicate', requireAuth, async (req, res) => {
   try {
-    const original = await Form.findOne({ _id: req.params.id, architect: req.userId });
+    const original = await Form.findOne({ _id: req.params.id, creatorId: req.userId });
     if (!original) {
       return res.status(404).json({ message: 'Form not found' });
     }
@@ -135,17 +135,17 @@ router.post('/:id/duplicate', guardRoute, async (req, res) => {
       title: duplicateTitle,
       description: original.description,
       slug: buildSlug(duplicateTitle),
-      architect: req.userId,
+      creatorId: req.userId,
       fields: original.fields,
       design: original.design,
       settings: original.settings,
       isPublished: false,          // duplicates always start as drafts
-      submissionCount: 0,
+      replyCount: 0,
     });
 
     res.status(201).json({ form: duplicate });
   } catch (err) {
-    console.error('Duplicate form error:', err.message);
+    console.log('Error caught in Duplicate form error::', err.message);
     res.status(500).json({ message: 'Failed to duplicate form' });
   }
 });
@@ -169,7 +169,7 @@ router.get('/public/:slug', async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('Public form error:', err.message);
+    console.log('Error caught in Public form error::', err.message);
     res.status(500).json({ message: 'Failed to fetch public form' });
   }
 });

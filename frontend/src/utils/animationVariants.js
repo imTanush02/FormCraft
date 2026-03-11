@@ -1,5 +1,5 @@
 
-export const staggerContainer = {
+export const listFadeIn = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -10,7 +10,7 @@ export const staggerContainer = {
   },
 };
 
-export const staggerItem = {
+export const itemSlideUp = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
@@ -80,7 +80,7 @@ export const loadingPulse = {
   },
 };
 
-export const successPop = {
+export const checkMarkPop = {
   hidden: { scale: 0, opacity: 0 },
   visible: {
     scale: 1, opacity: 1,

@@ -2,7 +2,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const guardRoute = require('../middleware/auth');
+const requireAuth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -42,7 +42,7 @@ router.post('/register', async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (err) {
-    console.error('Registration error:', err.message);
+    console.log('Error caught in Registration error::', err.message);
     res.status(500).json({ message: 'Server error during registration' });
   }
 });
@@ -72,12 +72,12 @@ router.post('/login', async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (err) {
-    console.error('Login error:', err.message);
+    console.log('Error caught in Login error::', err.message);
     res.status(500).json({ message: 'Server error during login' });
   }
 });
 
-router.get('/profile', guardRoute, async (req, res) => {
+router.get('/profile', requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('-passwordHash');
     if (!user) {
@@ -85,7 +85,7 @@ router.get('/profile', guardRoute, async (req, res) => {
     }
     res.json({ user: { id: user._id, name: user.name, email: user.email } });
   } catch (err) {
-    console.error('Profile error:', err.message);
+    console.log('Error caught in Profile error::', err.message);
     res.status(500).json({ message: 'Server error fetching profile' });
   }
 });

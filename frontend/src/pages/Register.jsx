@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import useAuth from '../hooks/useAuth';
-import { fadeUp, staggerContainer, staggerItem } from '../utils/animationVariants';
+import { fadeUp, listFadeIn, itemSlideUp } from '../utils/animationVariants';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -54,12 +54,12 @@ export default function Register() {
       {}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-surface-950">
         <motion.div
-          variants={staggerContainer}
+          variants={listFadeIn}
           initial="hidden"
           animate="visible"
           className="w-full max-w-md"
         >
-          <motion.div variants={staggerItem} className="mb-8">
+          <motion.div variants={itemSlideUp} className="mb-8">
             <div className="lg:hidden flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-brand-500/20 rounded-xl flex items-center justify-center">
                 <i className="ri-quill-pen-line text-xl text-brand-400"></i>
@@ -71,7 +71,7 @@ export default function Register() {
           </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <motion.div variants={staggerItem}>
+            <motion.div variants={itemSlideUp}>
               <label htmlFor="reg-name" className="block text-sm font-medium text-surface-300 mb-1.5">
                 Full name
               </label>
@@ -87,7 +87,7 @@ export default function Register() {
               />
             </motion.div>
 
-            <motion.div variants={staggerItem}>
+            <motion.div variants={itemSlideUp}>
               <label htmlFor="reg-email" className="block text-sm font-medium text-surface-300 mb-1.5">
                 Email address
               </label>
@@ -103,7 +103,7 @@ export default function Register() {
               />
             </motion.div>
 
-            <motion.div variants={staggerItem}>
+            <motion.div variants={itemSlideUp}>
               <label htmlFor="reg-password" className="block text-sm font-medium text-surface-300 mb-1.5">
                 Password
               </label>
@@ -119,7 +119,7 @@ export default function Register() {
               />
             </motion.div>
 
-            <motion.div variants={staggerItem}>
+            <motion.div variants={itemSlideUp}>
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -142,7 +142,7 @@ export default function Register() {
             </motion.div>
           </form>
 
-          <motion.p variants={staggerItem} className="mt-6 text-center text-surface-400 text-sm">
+          <motion.p variants={itemSlideUp} className="mt-6 text-center text-surface-400 text-sm">
             Already have an account?{' '}
             <Link to="/login" className="text-brand-400 hover:text-brand-300 font-medium transition-colors">
               Sign in
