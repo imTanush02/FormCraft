@@ -47,6 +47,10 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+app.get('/', (_req, res) => {
+  res.send('FormCraft API is running smoothly.');
+});
+
 app.use((err, _req, res, _next) => {
   console.log('Error caught in Unhandled error::', err.stack);
   res.status(500).json({ message: 'Internal server error' });
