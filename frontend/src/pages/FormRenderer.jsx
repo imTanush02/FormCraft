@@ -3,11 +3,11 @@ import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
-import DynamicField from '../components/FormRenderer/DynamicField';
+import SmartInput from '../components/FormRenderer/SmartInput';
 import useConditionalLogic from '../hooks/useConditionalLogic';
 import { validateAllFields } from '../utils/validators';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
-import { staggerContainer, staggerItem, successPop } from '../utils/animationVariants';
+import { listFadeIn, itemSlideUp, checkMarkPop } from '../utils/animationVariants';
 
 export default function FormRenderer() {
   const { slug } = useParams();
@@ -18,7 +18,7 @@ export default function FormRenderer() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const { evaluateFieldVisibility } = useConditionalLogic();
+  const { checkIfShouldShow } = useConditionalLogic();
   useEffect(() => {
     const loadForm = async () => {
       try {
@@ -35,10 +35,10 @@ export default function FormRenderer() {
   const visibleFields = useMemo(() => {
     if (!form) return [];
     return form.fields.filter((field) => {
-      const { visible } = evaluateFieldVisibility(field.conditionalRules, answers);
+      const { visible } = checkIfShouldShow(field.conditionalRules, answers);
       return visible;
     });
-  }, [form, answers, evaluateFieldVisibility]);
+  }, [form, answers, checkIfShouldShow]);
   const filledCount = useMemo(() => {
     return visibleFields.filter((f) => {
       const v = answers[f.fieldId];
@@ -102,7 +102,7 @@ export default function FormRenderer() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <motion.div
-          variants={successPop}
+          variants={checkMarkPop}
           initial="hidden"
           animate="visible"
           className="text-center max-w-md"
@@ -181,7 +181,7 @@ export default function FormRenderer() {
         {}
         <form onSubmit={handleSubmit}>
           <motion.div
-            variants={staggerContainer}
+            variants={listFadeIn}
             initial="hidden"
             animate="visible"
             className="flex flex-wrap"
@@ -191,7 +191,7 @@ export default function FormRenderer() {
               {visibleFields.map((field) => (
                 <motion.div
                   key={field.fieldId}
-                  variants={staggerItem}
+                  variants={itemSlideUp}
                   initial="hidden"
                   animate="visible"
                   exit={{ opacity: 0, height: 0, transition: { duration: 0.2 } }}
@@ -201,7 +201,7 @@ export default function FormRenderer() {
                       : `calc(${field.widthPercent}% - ${(design.fieldSpacing || 16) / 2}px)`,
                   }}
                 >
-                  <DynamicField
+                  <SmartInput
                     field={field}
                     value={answers[field.fieldId]}
                     onChange={(val) => handleFieldChange(field.fieldId, val)}

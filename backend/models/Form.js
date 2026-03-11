@@ -80,7 +80,7 @@ const formBlueprint = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    architect: {
+    creatorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
@@ -89,7 +89,7 @@ const formBlueprint = new mongoose.Schema(
     design: { type: designSchema, default: () => ({}) },
     settings: { type: settingsSchema, default: () => ({}) },
     isPublished: { type: Boolean, default: false },
-    submissionCount: { type: Number, default: 0 },       // denormalized counter for quick access
+    replyCount: { type: Number, default: 0 },       // denormalized counter for quick access
   },
   {
     timestamps: true,

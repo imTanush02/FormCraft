@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FormBuilderContext } from '../../context/FormBuilderContext';
 import fieldTypeConfig from '../../utils/fieldTypeConfig';
-import { staggerContainer, staggerItem, fieldAppear } from '../../utils/animationVariants';
+import { listFadeIn, itemSlideUp, fieldAppear } from '../../utils/animationVariants';
 import ConditionalLogicBuilder from './ConditionalLogicBuilder';
 
 export default function FieldsTab() {
@@ -48,7 +48,7 @@ export default function FieldsTab() {
           {fields.length === 0 ? (
             <p className="text-surface-500 text-sm italic">No fields added yet. Click a field type above to add one.</p>
           ) : (
-            <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="space-y-2">
+            <motion.div variants={listFadeIn} initial="hidden" animate="visible" className="space-y-2">
               <AnimatePresence mode="popLayout">
                 {fields.map((field, idx) => (
                   <motion.div

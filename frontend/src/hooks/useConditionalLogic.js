@@ -29,7 +29,7 @@ export default function useConditionalLogic() {
     }
   }, []);
 
-  const evaluateFieldVisibility = useCallback((rules, answers) => {
+  const checkIfShouldShow = useCallback((rules, answers) => {
     if (!rules || rules.length === 0) {
       return { visible: true, required: null };
     }
@@ -67,5 +67,5 @@ export default function useConditionalLogic() {
     return { visible, required };
   }, [evaluateRule]);
 
-  return { evaluateRule, evaluateFieldVisibility };
+  return { evaluateRule, checkIfShouldShow };
 }

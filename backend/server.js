@@ -48,7 +48,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use((err, _req, res, _next) => {
-  console.error('Unhandled error:', err.stack);
+  console.log('Error caught in Unhandled error::', err.stack);
   res.status(500).json({ message: 'Internal server error' });
 });
 
@@ -61,7 +61,7 @@ mongoose
     });
   })
   .catch((err) => {
-    console.error('❌ MongoDB connection failed:', err.message);
+    console.log('Error caught in ❌ MongoDB connection failed::', err.message);
     process.exit(1);
   });
 

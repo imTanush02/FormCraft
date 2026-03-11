@@ -9,7 +9,7 @@ import Papa from 'papaparse';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
-import { staggerContainer, staggerItem } from '../utils/animationVariants';
+import { listFadeIn, itemSlideUp } from '../utils/animationVariants';
 
 const ACCENT_COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#eab308', '#22c55e', '#14b8a6'];
 
@@ -117,20 +117,20 @@ export default function ResponseViewer() {
         {}
         {analytics && (
           <motion.div
-            variants={staggerContainer}
+            variants={listFadeIn}
             initial="hidden"
             animate="visible"
             className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8"
           >
-            <motion.div variants={staggerItem} className="glass-card p-5">
+            <motion.div variants={itemSlideUp} className="glass-card p-5">
               <p className="text-sm text-surface-400 mb-1">Total Submissions</p>
               <p className="text-3xl font-display font-bold text-white">{analytics.totalSubmissions}</p>
             </motion.div>
-            <motion.div variants={staggerItem} className="glass-card p-5">
+            <motion.div variants={itemSlideUp} className="glass-card p-5">
               <p className="text-sm text-surface-400 mb-1">Fields</p>
               <p className="text-3xl font-display font-bold text-white">{formMeta.fields.length}</p>
             </motion.div>
-            <motion.div variants={staggerItem} className="glass-card p-5">
+            <motion.div variants={itemSlideUp} className="glass-card p-5">
               <p className="text-sm text-surface-400 mb-1">Analytics Fields</p>
               <p className="text-3xl font-display font-bold text-white">{Object.keys(analytics.fieldStats).length}</p>
             </motion.div>

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const responseBlueprint = new mongoose.Schema(
   {
 
-    formRef: {
+    parentFormId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Form',
       required: true,
@@ -17,7 +17,7 @@ const responseBlueprint = new mongoose.Schema(
       default: {},
     },
 
-    metadata: {
+    sysDetails: {
       ipAddress: { type: String, default: 'unknown' },
       userAgent: { type: String, default: 'unknown' },
       referrer: { type: String, default: '' },

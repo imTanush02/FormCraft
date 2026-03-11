@@ -2,7 +2,7 @@
 import { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { FormBuilderContext } from '../../context/FormBuilderContext';
-import DynamicField from '../FormRenderer/DynamicField';
+import SmartInput from '../FormRenderer/SmartInput';
 import { tabSlide } from '../../utils/animationVariants';
 
 export default function PreviewTab() {
@@ -69,7 +69,7 @@ export default function PreviewTab() {
                       : `calc(${field.widthPercent}% - ${design.fieldSpacing / 2}px)`,
                   }}
                 >
-                  <DynamicField
+                  <SmartInput
                     field={field}
                     value=""
                     onChange={() => {}}

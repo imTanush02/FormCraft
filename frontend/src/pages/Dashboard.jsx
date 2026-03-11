@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import useForm from '../hooks/useForm';
-import FormCard from '../components/Dashboard/FormCard';
+import DashboardItem from '../components/Dashboard/DashboardItem';
 import CreateFormModal from '../components/Dashboard/CreateFormModal';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
-import { staggerContainer, staggerItem } from '../utils/animationVariants';
+import { listFadeIn, itemSlideUp } from '../utils/animationVariants';
 
 export default function Dashboard() {
   const { currentUser, logout } = useAuth();
@@ -122,14 +122,14 @@ export default function Dashboard() {
           </div>
         ) : filteredForms.length > 0 ? (
           <motion.div
-            variants={staggerContainer}
+            variants={listFadeIn}
             initial="hidden"
             animate="visible"
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
           >
             {filteredForms.map((form) => (
-              <motion.div key={form._id} variants={staggerItem}>
-                <FormCard
+              <motion.div key={form._id} variants={itemSlideUp}>
+                <DashboardItem
                   form={form}
                   onDelete={handleDelete}
                   onTogglePublish={togglePublish}

@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
 
-export default function DynamicField({ field, value, onChange, error, designConfig, previewMode = false }) {
+export default function SmartInput({ field, value, onChange, error, designConfig, previewMode = false }) {
   const borderRadius = designConfig?.borderRadius || 8;
   const accentColor = designConfig?.accentColor || '#6366f1';
   const fileInputRef = useRef(null);
@@ -42,7 +42,7 @@ export default function DynamicField({ field, value, onChange, error, designConf
       setUploadedFileName(file.name);
       onChange(data.url);
     } catch (err) {
-      console.error('Upload failed:', err);
+      console.log('Error caught in Upload failed::', err);
       alert('File upload failed. Please try again.');
     } finally {
       setUploading(false);
