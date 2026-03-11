@@ -14,7 +14,6 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Basic server-side validation
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
@@ -22,17 +21,15 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Password must be at least 6 characters' });
     }
 
-    // Duplicate-email guard
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return res.status(409).json({ message: 'An account with this email already exists' });
     }
 
-    // Create user — the pre-save hook hashes the password automatically
     const user = await User.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
-      passwordHash: password, // will be hashed by pre-save hook
+      passwordHash: password, 
     });
 
     const token = mintToken(user._id);

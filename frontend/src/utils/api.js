@@ -24,7 +24,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('fc_token');
       localStorage.removeItem('fc_user');
-      // Only redirect if not already on login/register page
+      
       if (!window.location.pathname.match(/\/(login|register)/)) {
         window.location.href = '/login';
       }

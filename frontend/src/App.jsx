@@ -20,7 +20,6 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/form/:slug" element={<FormRenderer />} />
 
-          {/* Protected routes — require authentication */}
           <Route path="/dashboard" element={
             <AuthGuard><Dashboard /></AuthGuard>
           } />

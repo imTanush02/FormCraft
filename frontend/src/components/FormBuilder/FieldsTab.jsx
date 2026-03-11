@@ -17,7 +17,7 @@ export default function FieldsTab() {
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 h-full">
-      {/* Left sidebar — add field buttons + field list */}
+      
       <div className="lg:w-72 flex-shrink-0 space-y-5">
         {}
         <div>
@@ -90,7 +90,6 @@ export default function FieldsTab() {
         </div>
       </div>
 
-      {/* Right panel — field editor */}
       <div className="flex-1 min-w-0">
         <AnimatePresence mode="wait">
           {selectedField ? (
@@ -161,7 +160,6 @@ export default function FieldsTab() {
                 />
               </div>
 
-              {/* Options (for dropdown, checkbox, radio) */}
               {fieldTypeConfig[selectedField.kind]?.hasOptions && (
                 <div>
                   <label className="block text-sm font-medium text-surface-300 mb-1.5">Options</label>
@@ -204,7 +202,6 @@ export default function FieldsTab() {
                 </div>
               )}
 
-              {/* Row: Required, Width, Alignment */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {}
                 <div>

@@ -10,8 +10,8 @@ const router = express.Router();
 const buildSlug = (title) => {
   const base = title
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')  // replace non-alphanumeric with hyphens
-    .replace(/^-|-$/g, '');        // trim leading/trailing hyphens
+    .replace(/[^a-z0-9]+/g, '-')  
+    .replace(/^-|-$/g, '');        
   return `${base}-${nanoid(6)}`;
 };
 
@@ -96,7 +96,6 @@ router.delete('/:id', requireAuth, async (req, res) => {
       return res.status(404).json({ message: 'Form not found' });
     }
 
-    // Cascade-delete all responses tied to this form
     await Response.deleteMany({ parentFormId: form._id });
 
     res.json({ message: 'Form and its responses deleted successfully' });
@@ -139,7 +138,7 @@ router.post('/:id/duplicate', requireAuth, async (req, res) => {
       fields: original.fields,
       design: original.design,
       settings: original.settings,
-      isPublished: false,          // duplicates always start as drafts
+      isPublished: false,          
       replyCount: 0,
     });
 
@@ -157,7 +156,6 @@ router.get('/public/:slug', async (req, res) => {
       return res.status(404).json({ message: 'Form not found or not published' });
     }
 
-    // Return only the data needed for rendering — exclude internal fields
     res.json({
       form: {
         id: form._id,

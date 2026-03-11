@@ -5,7 +5,6 @@ const requireAuth = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    // Expect format: "Bearer <token>"
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ message: 'Authentication required — no token provided' });
     }

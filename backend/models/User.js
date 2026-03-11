@@ -11,7 +11,7 @@ const userBlueprint = new mongoose.Schema(
       trim: true,
       maxlength: [60, 'Name cannot exceed 60 characters'],
     },
-    /* Login identifier – must be unique across the platform */
+    
     email: {
       type: String,
       required: [true, 'Email is required'],
@@ -20,14 +20,14 @@ const userBlueprint = new mongoose.Schema(
       trim: true,
       match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email'],
     },
-    /* bcrypt-hashed password (never stored in plain text) */
+    
     passwordHash: {
       type: String,
       required: [true, 'Password is required'],
     },
   },
   {
-    timestamps: true, // auto-managed createdAt & updatedAt
+    timestamps: true, 
   }
 );
 

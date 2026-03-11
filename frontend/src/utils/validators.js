@@ -61,7 +61,7 @@ const validators = {
 
 export const validateField = (value, field) => {
   const validatorFn = validators[field.kind];
-  if (!validatorFn) return null; // unknown type — skip validation
+  if (!validatorFn) return null; 
   return validatorFn(value, field);
 };
 
