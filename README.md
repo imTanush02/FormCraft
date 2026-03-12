@@ -132,8 +132,4 @@ NODE_ENV=development
 7. **Collect Responses** → View in table or charts
 8. **Export** → Download as CSV/JSON
 
----
 
-## 📜 License
-
-MIT License — free for educational and personal use.
